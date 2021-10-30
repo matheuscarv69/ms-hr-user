@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import src.entities.user.request.NewUserRequest
+import src.entities.user.request.UpdateUserRequest
 import src.entities.user.usecase.CreateNewUserUseCase
+import src.entities.user.usecase.UpdateUserUseCase
 import javax.validation.Valid
 
 @Api(tags = ["User"])
@@ -19,16 +21,21 @@ import javax.validation.Valid
 @RequestMapping("/v1/users")
 class UserController(
     @Autowired
-    private val createNewUserService: CreateNewUserUseCase
+    private val createNewUserService: CreateNewUserUseCase,
+
+    @Autowired
+    private val updateUserService: UpdateUserUseCase
 ) {
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     @ApiOperation("Register New User")
-    @ApiResponses(value = [
-        ApiResponse(code = 201, message = "Successfully registered user"),
-        ApiResponse(code = 400, message = "Poorly Formatted Request"),
-        ApiResponse(code = 500, message = "Internal Server Error")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 201, message = "Successfully registered user"),
+            ApiResponse(code = 400, message = "Poorly Formatted Request"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun createUser(
@@ -43,5 +50,26 @@ class UserController(
         return ResponseEntity.created(uri).build()
     }
 
+    @ApiOperation("Update User")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 204, message = "User Updated successfully"),
+            ApiResponse(code = 400, message = "Poorly Formatted Request"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{userId}")
+    fun updateUser(
+        @PathVariable userId: Long,
+        @RequestBody @Valid request: UpdateUserRequest
+    ): ResponseEntity<Void> {
+        log.info("Receiving request for user update, name: ${request.name}")
+
+        updateUserService.updateUser(request.toModel(userId))
+
+        return ResponseEntity.noContent().build()
+    }
 
 }
