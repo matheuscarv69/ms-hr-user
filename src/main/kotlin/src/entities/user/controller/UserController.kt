@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import src.entities.user.request.NewUserRequest
 import src.entities.user.request.UpdateUserRequest
+import src.entities.user.response.DetailUserResponse
 import src.entities.user.usecase.CreateNewUserUseCase
+import src.entities.user.usecase.GetUserUseCase
 import src.entities.user.usecase.UpdateUserUseCase
 import javax.validation.Valid
 
@@ -24,7 +26,10 @@ class UserController(
     private val createNewUserService: CreateNewUserUseCase,
 
     @Autowired
-    private val updateUserService: UpdateUserUseCase
+    private val updateUserService: UpdateUserUseCase,
+
+    @Autowired
+    private val getUserService: GetUserUseCase
 ) {
     private val log = LoggerFactory.getLogger(this.javaClass)
 
@@ -71,5 +76,26 @@ class UserController(
 
         return ResponseEntity.noContent().build()
     }
+
+    @ApiOperation("Get User by ID")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 200, message = "User found successfully"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{userId}")
+    fun getUserById(
+        @PathVariable userId: Long,
+    ): ResponseEntity<DetailUserResponse> {
+        log.info("Receiving request for found user, id: $userId")
+
+        val userResponse = DetailUserResponse(getUserService.getUserById(userId))
+
+        return ResponseEntity.ok(userResponse)
+    }
+
 
 }
