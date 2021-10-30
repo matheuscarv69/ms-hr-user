@@ -2,6 +2,22 @@ version: '3'
 
 services:
 
+  # hr-user TODO uncomment when this api is already
+  #  api-hr-user:
+  #    build:
+  #      dockerfile: Dockerfile
+  #      context: .
+  #    container_name: api-hr-user
+  #    environment:
+  #      POSTGRES_HOST: postgres:5432
+  #      DB_USER: postgres
+  #      DB_PASSWORD: password
+  #      DB_SCHEMA: hr_user
+  #    ports:
+  #      - "9000:9000"
+  #    depends_on:
+  #      - postgres
+
   # database
   postgres:
     image: 'postgres:alpine'

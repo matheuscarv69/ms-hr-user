@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
-@Entity(name = "user")
+@Entity(name = "User")
 class User(
 
     @Id
@@ -23,16 +23,16 @@ class User(
     @field:NotBlank
     @field:Email
     @field:Size(max = 100)
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val email: String,
 
     @field:NotBlank
     @Column(nullable = false)
     val password: String,
 
-    @field:NotBlank
-    @field:JsonFormat(pattern = "dd/MM/aaaa", shape = JsonFormat.Shape.STRING)
-    @Column(nullable = false)
+    @field:NotNull
+    @field:JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @field:NotNull
