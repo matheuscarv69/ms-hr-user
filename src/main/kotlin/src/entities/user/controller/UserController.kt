@@ -6,6 +6,10 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort.Direction.*
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -97,5 +101,72 @@ class UserController(
         return ResponseEntity.ok(userResponse)
     }
 
+    @ApiOperation("Get All Users")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 200, message = "Users found successfully"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping()
+    fun getAllUsers(
+        @RequestParam(required = false, defaultValue = true.toString()) active: Boolean,
+        @PageableDefault(
+            page = 0,
+            size = 10,
+            sort = ["createdAt"],
+            direction = DESC
+        ) pageable: Pageable
+    ): ResponseEntity<Page<DetailUserResponse>> {
+        log.info("Receiving request for get all users")
+
+        val usersPage = getUserService.getAllUser(active, pageable)
+            .map { user ->
+                DetailUserResponse(user)
+            }
+
+        return ResponseEntity.ok(usersPage)
+    }
+
+    @ApiOperation("Enable User")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 204, message = "User Enable successfully"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{userId}/enable")
+    fun enableUser(
+        @PathVariable userId: Long,
+    ): ResponseEntity<Void> {
+        log.info("Receiving request for enable user, ID: $userId")
+
+        updateUserService.enableUser(userId)
+
+        return ResponseEntity.noContent().build()
+    }
+
+    @ApiOperation("Disable User")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 204, message = "User Disable successfully"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{userId}/disable")
+    fun disableUser(
+        @PathVariable userId: Long,
+    ): ResponseEntity<Void> {
+        log.info("Receiving request for disable user, ID: $userId")
+
+        updateUserService.disableUser(userId)
+
+        return ResponseEntity.noContent().build()
+    }
 
 }

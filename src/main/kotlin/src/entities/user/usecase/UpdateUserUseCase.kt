@@ -6,4 +6,8 @@ interface UpdateUserUseCase {
 
     fun updateUser(userDomain: User)
 
+    fun enableUser(userId: Long)
+
+    fun disableUser(userId: Long)
+
 }

@@ -32,5 +32,28 @@ class UpdateUserService(
 
     }
 
+    @Transactional
+    override fun disableUser(userId: Long) {
+        log.info("Deactivating User: $userId")
+
+        repository.findById(userId).orElseThrow {
+            UserNotFoundException("This User ID: $userId not found.")
+        }.let { user ->
+            user.disableUser()
+            repository.save(user)
+        }
+    }
+
+    @Transactional
+    override fun enableUser(userId: Long) {
+        log.info("Activating User: $userId")
+
+        repository.findById(userId).orElseThrow {
+            UserNotFoundException("This User ID: $userId not found.")
+        }.let { user ->
+            user.enableUser()
+            repository.save(user)
+        }
+    }
 
 }
