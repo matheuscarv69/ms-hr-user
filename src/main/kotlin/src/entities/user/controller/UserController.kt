@@ -97,5 +97,44 @@ class UserController(
         return ResponseEntity.ok(userResponse)
     }
 
+    @ApiOperation("Enable User")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 204, message = "User Enable successfully"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{userId}/enable")
+    fun enableUser(
+        @PathVariable userId: Long,
+    ): ResponseEntity<Void> {
+        log.info("Receiving request for enable user, ID: $userId")
+
+        updateUserService.enableUser(userId)
+
+        return ResponseEntity.noContent().build()
+    }
+
+    @ApiOperation("Disable User")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 204, message = "User Disable successfully"),
+            ApiResponse(code = 404, message = "User Not Found"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+        ]
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{userId}/disable")
+    fun disableUser(
+        @PathVariable userId: Long,
+    ): ResponseEntity<Void> {
+        log.info("Receiving request for disable user, ID: $userId")
+
+        updateUserService.disableUser(userId)
+
+        return ResponseEntity.noContent().build()
+    }
 
 }
