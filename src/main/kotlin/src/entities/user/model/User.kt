@@ -34,11 +34,12 @@ class User(
     @field:JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
+) {
 
     @field:NotNull
     @Column(nullable = false)
     var active: Boolean = true
-) {
+        private set
 
     fun enableUser(): Boolean {
         this.active = true

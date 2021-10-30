@@ -20,7 +20,7 @@ class DetailUserResponse(
     val active: Boolean
 ) {
 
-    public constructor(user: User) : this(
+    constructor(user: User) : this(
         name = user.name,
         email = user.email,
         createdAt = user.createdAt,
