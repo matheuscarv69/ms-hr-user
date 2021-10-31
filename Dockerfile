@@ -9,5 +9,5 @@ RUN mvn -f /usr/src/app/pom.xml clean package -Dmaven.test.skip
 FROM openjdk:11-slim
 MAINTAINER matheuscarv69
 COPY --from=builder /usr/src/app/target/hr-user-0.0.1-SNAPSHOT.jar /usr/app/app.jar
-EXPOSE 8080
+EXPOSE 9000
 ENTRYPOINT ["java", "-jar", "/usr/app/app.jar"]
