@@ -1,7 +1,6 @@
 package src.entities.user.request
 
 import io.swagger.annotations.ApiModelProperty
-import src.configs.validation.UniqueValue
 import src.entities.user.model.User
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -23,7 +22,12 @@ class UpdateUserRequest(
     @ApiModelProperty(value = "Password", position = 3, required = true)
     @field:NotBlank
     @field:Size(max = 100)
-    val password: String
+    val password: String,
+
+    @ApiModelProperty(value = "Department", position = 4, required = true)
+    @field:NotBlank
+    @field:Size(max = 100)
+    val department: String
 
 ) {
 
