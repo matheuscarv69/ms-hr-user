@@ -30,10 +30,6 @@ data class NewUserRequest(
     @field:Size(max = 100)
     val password: String,
 
-    @ApiModelProperty(value = "Department", position = 4, required = true)
-    @field:NotBlank
-    @field:Size(max = 100)
-    val department: String
 ) {
 
     fun toModel() = User(
