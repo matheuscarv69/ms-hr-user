@@ -28,7 +28,12 @@ data class NewUserRequest(
     @ApiModelProperty(value = "Password", position = 3, required = true)
     @field:NotBlank
     @field:Size(max = 100)
-    val password: String
+    val password: String,
+
+    @ApiModelProperty(value = "Department", position = 4, required = true)
+    @field:NotBlank
+    @field:Size(max = 100)
+    val department: String
 ) {
 
     fun toModel() = User(
