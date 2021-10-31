@@ -2,26 +2,27 @@ version: '3'
 
 services:
 
-  # hr-user TODO uncomment when this api is already
-  #  api-hr-user:
-  #    build:
-  #      dockerfile: Dockerfile
-  #      context: .
-  #    container_name: api-hr-user
-  #    environment:
-  #      POSTGRES_HOST: postgres:5432
-  #      DB_USER: postgres
-  #      DB_PASSWORD: password
-  #      DB_SCHEMA: hr_user
-  #    ports:
-  #      - "9000:9000"
-  #    depends_on:
-  #      - postgres
+  # hr-user
+  api-hr-user:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: api-hr-user
+    environment:
+      SERVER_PORT: 9000
+      POSTGRES_HOST: postgres_hr-user:5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_SCHEMA: hr_user
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres_hr-user
 
   # database
-  postgres:
+  postgres_hr-user:
     image: 'postgres:alpine'
-    container_name: postgres
+    container_name: postgres_hr-user
     ports:
       - "5432:5432"
     environment:
